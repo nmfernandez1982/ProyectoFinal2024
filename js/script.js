@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const limit = 10;
     let totalProducts = 0;
   
-    // Function to fetch and display products
     function fetchProducts(page) {
       const skip = (page - 1) * limit;
   
@@ -18,51 +17,61 @@ document.addEventListener("DOMContentLoaded", () => {
           totalProducts = data.total;
           const products = data.products;
   
-          // Clear the current table rows
           tableBody.innerHTML = '';
   
-          // Populate table with new products
           products.forEach(product => {
-            const row = document.createElement('tr');
-  
-            // Product image
-            const imgCell = document.createElement('td');
+            //creo la fila
+            const row = document.createElement('tr');  
+
+            //creo la celda del id
+            const idCelda = document.createElement('td');
+            idCelda.textContent = product.id;
+            row.appendChild(idCelda);
+
+            //creo la celda del imagen y el alt
+            const imgCelda = document.createElement('td');
             const img = document.createElement('img');
             img.src = product.thumbnail;
             img.alt = product.title;
-            imgCell.appendChild(img);
-            row.appendChild(imgCell);
+            imgCelda.appendChild(img);
+            row.appendChild(imgCelda);
+
+            
+            //creo la celda del titulo
+            const tituloCelda = document.createElement('td');
+            tituloCelda.textContent = product.title;
+            row.appendChild(tituloCelda);
   
-            // Product title
-            const titleCell = document.createElement('td');
-            titleCell.textContent = product.title;
-            row.appendChild(titleCell);
+            //creo la celda de la descripcion
+            const descCelda = document.createElement('td');
+            descCelda.textContent = product.description;
+            row.appendChild(descCelda);
   
-            // Product description
-            const descCell = document.createElement('td');
-            descCell.textContent = product.description;
-            row.appendChild(descCell);
-  
-            // Product price
-            const priceCell = document.createElement('td');
-            priceCell.textContent = `$${product.price}`;
-            row.appendChild(priceCell);
-  
-            // Append row to table body
+            const precioCelda = document.createElement('td');
+            precioCelda.textContent = `$${product.price}`;
+            row.appendChild(precioCelda);
+
+            // Botón "Agregar al carrito"
+            const actionCell = document.createElement('td');
+            const addButton = document.createElement('button');
+            addButton.textContent = 'Agregar';
+            addButton.classList.add('btn', 'btn-success');
+            actionCell.appendChild(addButton);
+            row.appendChild(actionCell);
+
+
+
+            //agrego la fila a la tabla
             tableBody.appendChild(row);
           });
   
-          // Update page info
-          pageInfo.textContent = `Page ${currentPage}`;
-          
-          // Enable or disable buttons based on page
+          pageInfo.textContent = `Page ${currentPage}`;          
           prevBtn.disabled = currentPage === 1;
           nextBtn.disabled = (currentPage * limit) >= totalProducts;
         })
         .catch(error => console.error('Error fetching products:', error));
     }
   
-    // Event listeners for pagination buttons
     prevBtn.addEventListener("click", () => {
       if (currentPage > 1) {
         currentPage--;
@@ -77,7 +86,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   
-    // Initial load
     fetchProducts(currentPage);
   });
   
